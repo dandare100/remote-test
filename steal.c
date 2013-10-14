@@ -12,6 +12,8 @@ asmlinkage long (*ref_sys_write)(unsigned int fd, const char __user *buf, size_t
 
 asmlinkage long new_sys_open(const char __user *filename, int flags, umode_t mode)
 {
+	printk(KERN_INFO "intercept: Opening file %s", filename);
+ 
 	return ref_sys_open(filename, flags, mode);
 }
 
@@ -20,8 +22,6 @@ asmlinkage long new_sys_read(unsigned int fd, char __user *buf, size_t count)
 	long ret;
 	ret = ref_sys_read(fd, buf, count);
 
-	if(count == 1 && fd == 0)
-		printk(KERN_INFO "intercept: 0x%02X", buf[0]);
 
 	return ret;
 }
